@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+ import { useState } from 'react'
+import Emsi from './assets/logo_emsi.png'
+import UCA from './assets/LOGO_UCA.jpg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+// Composant Header : Logo, Titre et Sous-Titre
+function Header() {
   return (
-    <>
+    <header>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <img src={Emsi} className="logo Emsi" alt="Emsi" />
+        <img src={UCA} className="logo UCA" alt="UCA" />
       </div>
-      <h1>MBDS + EMSI </h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <h1>Introduction à React</h1>
+      <h3>A la découverte des premières notions de React</h3>
+    </header>
+  );
 }
 
-export default App
+// Composant MainContent : Texte spécifique
+function MainContent() {
+  return (
+    <main className="content">
+      <p>Ici, nous afficherons des informations intéressantes :)</p>
+    </main>
+  );
+}
+
+// Composant Footer : Texte centré en bas
+function Footer() {
+  return (
+    <footer className="footer">
+      <p>Tous droits réservés - [Votre Nom] [Votre Prénom]</p>
+    </footer>
+  );
+}
+
+function App() {
+  return (
+    <div className="app-container">
+      <Header />
+      <MainContent />
+      <Footer />
+    </div>
+  );
+}
+
+export default App;

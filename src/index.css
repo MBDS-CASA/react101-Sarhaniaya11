@@ -36,6 +36,7 @@ header h1 {
   font-size: 5rem;
   background: linear-gradient(40deg, #ea00ff, #ea00ff, #03d5ff, #03d5ff);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
 }
@@ -147,4 +148,20 @@ main h2 {
 
 #tab-content code {
   font-size: 1rem;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Prend toute la hauteur de l'écran */
+  text-align: center;
+}
+
+.content {
+  flex: 1; /* Pousse le footer vers le bas */
+}
+
+.footer {
+  width: 100%;
+  padding: 20px 0;
+  border-top: 1px solid #ccc;
 }
