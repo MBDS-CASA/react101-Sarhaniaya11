@@ -36,13 +36,13 @@ function Header({ onMenuClick, activeMenu }) {
       </nav>
       <Box sx={{ textAlign: 'center', my: 3 }}>
         <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'white' }}>Introduction à React</Typography>
-        <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.7)' }}>A la découverte des premières notions de React</Typography>
+        <Typography variant="subtitle1" sx={{ color: 'rgba(255,255,255,0.7)' }}>Session 02 : Gestion dynamique et Optimisation</Typography>
       </Box>
     </header>
   );
 }
 
-// --- COMPOSANT : LISTE DES NOTES ---
+// --- COMPOSANT : LISTE DES NOTES (Onglet principal) ---
 function NotesList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [page, setPage] = useState(0);
@@ -134,29 +134,62 @@ function App() {
     switch (activeMenu) {
       case 'Notes': 
         return <NotesList />;
+      
       case 'Etudiants': 
-        return <Box sx={{ p: 4, textAlign: 'center', color: 'white' }}><h3>Gestion des {notesData.length} Étudiants</h3></Box>;
+        // Extraction des noms uniques
+        const uniqueStudents = [...new Set(notesData.map(item => `${item.student.firstname} ${item.student.lastname}`))];
+        return (
+          <Fade in timeout={600}>
+            <Box sx={{ p: 4, color: 'white', maxWidth: 600, margin: '0 auto' }}>
+              <Typography variant="h5" gutterBottom>Liste des {uniqueStudents.length} Étudiants</Typography>
+              <Paper sx={{ p: 2, bgcolor: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid #444' }}>
+                {uniqueStudents.sort().map((name, index) => (
+                  <Typography key={index} sx={{ borderBottom: '1px solid #333', py: 1.5, px: 2 }}>
+                    👤 {name}
+                  </Typography>
+                ))}
+              </Paper>
+            </Box>
+          </Fade>
+        );
+
       case 'Matières': 
-        return <Box sx={{ p: 4, textAlign: 'center', color: 'white' }}><h3>Liste des Matières</h3></Box>;
+        // Extraction des matières uniques
+        const uniqueCourses = [...new Set(notesData.map(item => item.course))];
+        return (
+          <Fade in timeout={600}>
+            <Box sx={{ p: 4, color: 'white', maxWidth: 600, margin: '0 auto' }}>
+              <Typography variant="h5" gutterBottom>Modules de formation</Typography>
+              <Paper sx={{ p: 2, bgcolor: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid #444' }}>
+                {uniqueCourses.sort().map((course, index) => (
+                  <Typography key={index} sx={{ borderBottom: '1px solid #333', py: 1.5, px: 2 }}>
+                    📚 {course}
+                  </Typography>
+                ))}
+              </Paper>
+            </Box>
+          </Fade>
+        );
+
       case 'A propos': 
         return (
           <Fade in timeout={600}>
-            <Paper sx={{ p: 4, maxWidth: 500, margin: '40px auto', textAlign: 'center' }}>
-              <Typography variant="h5" color="primary" gutterBottom>Informations</Typography>
-              <Typography variant="body1">Projet : Gestion de Notes React</Typography>
-              <Typography variant="body1" sx={{ fontWeight: 'bold', mt: 1 }}>
-                Développeur : Sarhani Aya
-              </Typography>
-              <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>Université EMSI - 2025</Typography>
+            <Paper sx={{ p: 4, maxWidth: 500, margin: '40px auto', textAlign: 'center', bgcolor: '#fff' }}>
+              <Typography variant="h5" color="primary" gutterBottom sx={{ fontWeight: 'bold' }}>Informations Projet</Typography>
+              <Typography variant="body1" sx={{ mt: 2 }}><strong>Titre :</strong> Gestion de Notes avec React</Typography>
+              <Typography variant="body1" sx={{ mt: 1 }}><strong>Développeur :</strong> Sarhani Aya</Typography>
+              <Typography variant="body1"><strong>Établissement :</strong> EMSI</Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mt: 3 }}>Version 1.0 - Année Universitaire 2025</Typography>
             </Paper>
           </Fade>
         );
+
       default: return <NotesList />;
     }
   };
 
   return (
-    <div className="app-container" style={{ minHeight: '100vh', background: '#1a0033' }}>
+    <div className="app-container" style={{ minHeight: '100vh', background: '#1a0033', paddingBottom: '20px' }}>
       <Header onMenuClick={setActiveMenu} activeMenu={activeMenu} />
       <main>
         {renderContent()}
