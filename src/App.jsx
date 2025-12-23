@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { 
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, 
+  Paper, Typography, TextField, TablePagination, TableSortLabel, Fade 
+} from '@mui/material';
 import './App.css';
 import Todo from './components/Todo';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
 import notesData from './data/data.json';
-import { TextField } from '@mui/material';
 
+// --- COMPOSANT HEADER ---
 function Header({ onMenuClick, activeMenu }) {
   const menuItems = ["Notes", "Etudiants", "Matières", "A propos"];
   return (
@@ -23,90 +26,110 @@ function Header({ onMenuClick, activeMenu }) {
           ))}
         </ul>
       </nav>
-      <h1>Introduction à React</h1>
-      <h3>A la découverte des premières notions de React</h3>
+      <div style={{ textAlign: 'center' }}>
+        <h1>Introduction à React</h1>
+        <h3>Session 02 : Optimisation et Listes Dynamiques</h3>
+      </div>
     </header>
   );
 }
 
-// Composant pour afficher les Notes sous forme de tableau MUI
+// --- COMPOSANT LISTE DES NOTES (Optimisé) ---
 function NotesList() {
-  function NotesList() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [order, setOrder] = useState('asc');
 
-  // Filtrage des données en fonction de la recherche
+  // Filtrage
   const filteredNotes = notesData.filter((item) =>
     item.matiere.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  return (
-    <TableContainer component={Paper} sx={{ maxWidth: 800, margin: '20px auto', p: 2 }}>
-      <Typography variant="h6">Liste des Notes</Typography>
-      
-      {/* Barre de recherche */}
-      <TextField 
-        label="Rechercher une matière..." 
-        variant="outlined" 
-        fullWidth 
-        margin="normal"
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+  // Tri
+  const sortedNotes = useMemo(() => {
+    return [...filteredNotes].sort((a, b) => {
+      if (order === 'asc') return a.note - b.note;
+      return b.note - a.note;
+    });
+  }, [filteredNotes, order]);
 
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell><strong>Matière</strong></TableCell>
-            <TableCell align="right"><strong>Note</strong></TableCell>
-            <TableCell><strong>Appréciation</strong></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {filteredNotes.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.matiere}</TableCell>
-              <TableCell align="right">{row.note}/20</TableCell>
-              <TableCell>{row.appreciation}</TableCell>
+  // Pagination
+  const paginatedNotes = sortedNotes.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  return (
+    <Fade in={true} timeout={1000}>
+      <TableContainer component={Paper} sx={{ maxWidth: 900, margin: '20px auto', p: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Gestion des Notes</Typography>
+        
+        <TextField 
+          label="Rechercher une matière..." 
+          variant="outlined"
+          fullWidth 
+          margin="normal"
+          onChange={(e) => { setSearchTerm(e.target.value); setPage(0); }}
+        />
+
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell><strong>Matière</strong></TableCell>
+              <TableCell align="right">
+                <TableSortLabel
+                  active={true}
+                  direction={order}
+                  onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
+                >
+                  <strong>Note / 20</strong>
+                </TableSortLabel>
+              </TableCell>
+              <TableCell><strong>Appréciation</strong></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {paginatedNotes.map((row) => (
+              <TableRow key={row.id} hover>
+                <TableCell>{row.matiere}</TableCell>
+                <TableCell align="right">{row.note}</TableCell>
+                <TableCell>{row.appreciation}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+
+        <TablePagination
+          rowsPerPageOptions={[5, 10]}
+          component="div"
+          count={filteredNotes.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(e, newPage) => setPage(newPage)}
+          onRowsPerPageChange={(e) => { setRowsPerPage(parseInt(e.target.value, 10)); setPage(0); }}
+        />
+      </TableContainer>
+    </Fade>
   );
 }
-//   return (
-//     <TableContainer component={Paper} sx={{ maxWidth: 800, margin: '20px auto' }}>
-//       <Typography variant="h6" sx={{ p: 2 }}>Liste des Notes</Typography>
-//       <Table>
-//         <TableHead>
-//           <TableRow>
-//             <TableCell><strong>Matière</strong></TableCell>
-//             <TableCell align="right"><strong>Note</strong></TableCell>
-//             <TableCell><strong>Appréciation</strong></TableCell>
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {notesData.map((row) => (
-//             <TableRow key={row.id}>
-//               <TableCell>{row.matiere}</TableCell>
-//               <TableCell align="right">{row.note}/20</TableCell>
-//               <TableCell>{row.appreciation}</TableCell>
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </TableContainer>
-//   );
-// }
 
+// --- COMPOSANT FOOTER ---
+function Footer() {
+  return (
+    <footer className="footer" style={{ textAlign: 'center', padding: '20px' }}>
+      <p>© {new Date().getFullYear()} - [Votre Nom], Tous droits réservés.</p>
+    </footer>
+  );
+}
+
+// --- COMPOSANT PRINCIPAL APP ---
 function App() {
   const [activeMenu, setActiveMenu] = useState('Notes');
 
   const renderContent = () => {
     switch (activeMenu) {
       case 'Notes': return <NotesList />;
-      case 'Etudiants': return <div className="placeholder">Contenu Étudiants</div>;
-      case 'Matières': return <div className="placeholder">Contenu Matières</div>;
-      case 'A propos': return <div className="placeholder">Ce projet est réalisé par [Votre Nom]</div>;
+      case 'Etudiants': return <div className="placeholder">Liste des Étudiants</div>;
+      case 'Matières': return <div className="placeholder">Liste des Matières</div>;
+      case 'A propos': return <div className="placeholder">Projet React - Session 02</div>;
       default: return <NotesList />;
     }
   };
@@ -115,9 +138,7 @@ function App() {
     <div className="app-container">
       <Header onMenuClick={setActiveMenu} activeMenu={activeMenu} />
       <main>{renderContent()}</main>
-      <footer className="footer">
-        <p>© {new Date().getFullYear()} - Tous droits réservés</p>
-      </footer>
+      <Footer />
     </div>
   );
 }
