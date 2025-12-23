@@ -49,3 +49,28 @@
 .read-the-docs {
   color: #888;
 }
+.nav-menu ul {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  background: #f4f4f4;
+  padding: 10px;
+}
+
+.nav-menu button {
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-menu button.active {
+  background-color: #1976d2;
+  color: white;
+  border-radius: 4px;
+}
+
+.placeholder {
+  padding: 50px;
+  text-align: center;
+  font-size: 1.2rem;
+}
