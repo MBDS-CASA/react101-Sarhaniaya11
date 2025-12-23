@@ -18,6 +18,15 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* EMSI-specific logo sizing */
+.logo.Emsi {
+  height: 4rem;
+  width: auto;
+  padding: 0.5rem;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.03);
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);

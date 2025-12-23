@@ -7,7 +7,9 @@ function Header() {
   return (
     <header>
       <div>
-        <img src={Emsi} className="logo Emsi" alt="Emsi" />
+        <a href="https://www.emsi.ma" target="_blank" rel="noopener noreferrer" aria-label="Aller au site EMSI">
+          <img src={Emsi} className="logo Emsi" alt="EMSI - École de Management et d'Informatique" />
+        </a>
         <img src={UCA} className="logo UCA" alt="UCA" />
       </div>
       <h1>Introduction à React</h1>
@@ -47,7 +49,17 @@ function Footer() {
     </footer>
   );
 }
-
+function NoteDetail({ item }) {
+  if (!item) return <p>Aucune note sélectionnée</p>;
+  return (
+    <div style={{ border: '1px solid #ccc', padding: '10px', marginTop: '10px' }}>
+      <h3>Détails de la Note</h3>
+      <p><strong>Matière :</strong> {item.matiere}</p>
+      <p><strong>Note :</strong> {item.note}/20</p>
+      <p><strong>Appréciation :</strong> {item.appreciation}</p>
+    </div>
+  );
+}
 function App() {
   return (
     <div className="app-container">

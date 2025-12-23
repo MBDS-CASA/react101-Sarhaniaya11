@@ -1,0 +1,6 @@
+[
+  { "id": 1, "matiere": "React", "note": 18, "appreciation": "Excellent travail" },
+  { "id": 2, "matiere": "Java", "note": 15, "appreciation": "Très bien" },
+  { "id": 3, "matiere": "Base de données", "note": 12, "appreciation": "Assez bien" },
+  { "id": 4, "matiere": "Anglais", "note": 16, "appreciation": "Très bon niveau" }
+]
